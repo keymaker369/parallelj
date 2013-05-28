@@ -2,7 +2,6 @@ package com.cometoin;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.cometoin.sample.SampleTask;
+
 public final class DoTasks {
 
 	// PRIVATE
@@ -23,26 +24,18 @@ public final class DoTasks {
 
 		DoTasks tasker = new DoTasks();
 		waitTimes = tasker.genrateArrayListOfINTs(48);
-
-		log("Srray wait time SUM: " + tasker.calculateWaitTimeSum(waitTimes));
-		
-		try {
-			log("Parallel, report each as it completes:");
-			tasker.runAndReportEachWhenKnown();
-
-			log("Parallel, report all at end:");
-			tasker.runAndReportAllAtEnd();
-
-			log("Sequential, report each as it completes:");
-			tasker.runAndReportSequentially();
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		} catch (ExecutionException ex) {
-			log("Problem executing worker: " + ex.getCause());
-		} catch (MalformedURLException ex) {
-			log("Bad URL: " + ex.getCause());
+		List<Task> tasks = new ArrayList<>(waitTimes.size());
+		for (int i = 0; i < waitTimes.size(); i++) {
+			tasks.add(i, new SampleTask(waitTimes.get(i)));
 		}
-		log("Done.");
+		
+		log("Array wait time SUM: " + tasker.calculateWaitTimeSum(waitTimes));
+
+		TasksExecutor tasksParallelExecutor = new TasksExecutor(tasks, 8, ExecutionOption.PARALLEL);
+		tasksParallelExecutor.run();
+		TasksExecutor tasksSequentialExecutor = new TasksExecutor(tasks, 8, ExecutionOption.SEQUENTIALL);
+		tasksSequentialExecutor.run();
+		
 	}
 
 	void runAndReportEachWhenKnown() throws InterruptedException, ExecutionException {
@@ -54,7 +47,7 @@ public final class DoTasks {
 		ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 		CompletionService<TaskResult> compService = new ExecutorCompletionService<TaskResult>(executor);
 		for (Integer seconds : waitTimes) {
-			Task task = new Task(seconds);
+			Task task = new SampleTask(seconds);
 			compService.submit(task);
 		}
 		for (int idx = 0; idx < waitTimes.size(); ++idx) {
@@ -75,7 +68,7 @@ public final class DoTasks {
 
 		Collection<Callable<TaskResult>> tasks = new ArrayList<Callable<TaskResult>>();
 		for (Integer seconds : waitTimes) {
-			tasks.add(new Task(seconds));
+			tasks.add(new SampleTask(seconds));
 		}
 		int numThreads = waitTimes.size() > 20 ? 20 : waitTimes.size(); // max 7
 		// threads
@@ -111,19 +104,6 @@ public final class DoTasks {
 		System.out.println(String.valueOf(aMsg));
 	}
 
-	private final class Task implements Callable<TaskResult> {
-
-		private final Integer seconds;
-
-		Task(Integer seconds) {
-			this.seconds = seconds;
-		}
-
-		public TaskResult call() throws Exception {
-			return runAndReportStatus(seconds);
-		}
-	}
-
 	private TaskResult runAndReportStatus(Integer seconds) {
 		TaskResult result = new TaskResult();
 		long start = System.currentTimeMillis();
@@ -136,17 +116,6 @@ public final class DoTasks {
 			// ignore - fails
 		}
 		return result;
-	}
-
-	/** Hold all the date related to a ping. */
-	private final class TaskResult {
-		Boolean SUCCESS;
-		Long TIMING;
-
-		@Override
-		public String toString() {
-			return "Result:" + SUCCESS + " " + TIMING + " msecs ";
-		}
 	}
 
 	public ArrayList<Integer> genrateArrayListOfINTs(int size) {

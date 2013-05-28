@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>50</x>
+      <y>240</y>
+      <w>190</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>TasksExecutorResult
+--
+- SUCCESS: boolean
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>80</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+/Task/
+--
+call() : abstract TaskResult
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>990</x>
+      <y>80</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>TaskResult
+--
+- SUCCESS : Boolean
+- TIMING : Long</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>60</x>
+      <y>110</y>
+      <w>170</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>ExecutionOption
+--
+- PARALLEL: String
+- SEQUENTIALL:String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>310</x>
+      <y>80</y>
+      <w>270</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>TasksExecutor
+--
+- tasks: List
+- numThreads: int
+- executionOption: ExecutionOption
+--
+run(): TasksExecutorResult</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
