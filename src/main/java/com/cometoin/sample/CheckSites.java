@@ -1,4 +1,4 @@
-package com.cometoin;
+package com.cometoin.sample;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
