@@ -1,4 +1,4 @@
-package com.cometoin.sample;
+package com.cometoin;
 
 import com.cometoin.Task;
 import com.cometoin.TaskResult;

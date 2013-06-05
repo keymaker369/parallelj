@@ -29,12 +29,10 @@ public class TasksExecutor {
 
 			switch (executionOption) {
 			case PARALLEL:
-				runParallel();
-				break;
+				return runParallel();
 
 			case SEQUENTIALL:
-				runSequeniall();
-				break;
+				return runSequeniall();
 
 			default:
 				throw new RuntimeException("ExecutionOption should be PARALLEL or SEQUENTIALL");
@@ -51,7 +49,7 @@ public class TasksExecutor {
 		return null;
 	}
 
-	private void runParallel() throws InterruptedException, ExecutionException {
+	private TasksExecutorResult runParallel() throws InterruptedException, ExecutionException {
 
 		long start = System.currentTimeMillis();
 
@@ -65,13 +63,18 @@ public class TasksExecutor {
 
 		long end = System.currentTimeMillis();
 
-		System.out.println("Duration in seconds: " + ((end - start) / 1000));
-
 		executor.shutdown(); // always reclaim resources
 
+		long duration = (end - start) / 1000;
+		
+		System.out.println("Duration in seconds: " + duration);
+		
+		return new TasksExecutorResult(true, duration);
+		
+		
 	}
 
-	private void runSequeniall() throws Exception {
+	private TasksExecutorResult runSequeniall() throws Exception {
 		long start = System.currentTimeMillis();
 
 		for (Task task : tasks) {
@@ -81,7 +84,11 @@ public class TasksExecutor {
 
 		long end = System.currentTimeMillis();
 
-		System.out.println("Duration in seconds: " + ((end - start) / 1000));
+		long duration = (end - start) / 1000;
+		
+		System.out.println("Duration in seconds: " + duration);
+		
+		return new TasksExecutorResult(true, duration);
 
 	}
 
