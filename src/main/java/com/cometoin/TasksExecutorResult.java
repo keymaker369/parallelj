@@ -6,9 +6,14 @@ public class TasksExecutorResult {
 	
 	public long secconds;
 
-	public TasksExecutorResult(Boolean sUCCESS, long secconds) {
-		SUCCESS = sUCCESS;
+	public TasksExecutorResult(Boolean SUCCESS, long secconds) {
+		this.SUCCESS = SUCCESS;
 		this.secconds = secconds;
+	}
+
+	@Override
+	public String toString() {
+		return "TasksExecutorResult [SUCCESS=" + SUCCESS + ", secconds=" + secconds + "]";
 	}
 	
 }
