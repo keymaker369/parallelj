@@ -2,8 +2,8 @@ package com.cometoin;
 
 public final class TaskResult {
 	
-	public Boolean SUCCESS;
-	public Long TIMING;
+	public Boolean SUCCESS = false;
+	public Long TIMING = new Long(0);
 
 	@Override
 	public String toString() {
